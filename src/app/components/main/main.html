@@ -1,0 +1,23 @@
+<div class="container mt-4">
+  <h2>Visi Pasākumi</h2>
+
+  <div *ngIf="loading" class="text-center">
+    <p>Ielādē pasākumus...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div class="row">
+    <div *ngFor="let event of events" class="col-md-4 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ event.title }}</h5>
+          <p class="card-text">{{ event.description }}</p>
+          <button class="btn btn-primary" (click)="joinEvent(event.id)">Pievienoties</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

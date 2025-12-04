@@ -1,0 +1,107 @@
+<div class="container-fluid bg text-white">
+  <form>
+    <div class="row">
+      <!-- KREISĀ SĀNA INFO – noteikumi / statistika -->
+      <div class="col-sm-4 text-start">
+        <div [innerHTML]="rules" [hidden]="rulesBoolean()"></div>
+
+        <div [hidden]="!rulesBoolean()">
+          <h2>Pasākumu statistika</h2>
+          <p>Kopā izveidoti pasākumi: {{ globalUser.userGlobalSignal().createdEvents }}</p>
+          <p>Pieteiktie pasākumi: {{ globalUser.userGlobalSignal().joinedEvents }}</p>
+        </div>
+      </div>
+
+      <!-- LABĀ PUSE – Pasākuma izveide + saraksts -->
+      <div class="col-sm-8">
+        <!-- Pasākuma izveide -->
+        <div class="row">
+          <h3 class="mb-3">Izveidot jaunu pasākumu</h3>
+
+          <div class="col-sm-6">
+            <label><strong>Nosaukums</strong></label>
+            <input
+              class="form-control"
+              type="text"
+              id="title"
+              formControlName="title"
+              (focus)="clearInput(inputTitle)"
+              #inputTitle
+            />
+          </div>
+
+          <div class="col-sm-6">
+            <label><strong>Datums</strong></label>
+            <input
+              class="form-control"
+              type="date"
+              id="date"
+              formControlName="date"
+              (focus)="clearInput(inputDate)"
+              #inputDate
+            />
+          </div>
+
+          <div class="col-sm-12 mt-3">
+            <label><strong>Apraksts</strong></label>
+            <textarea
+              class="form-control"
+              id="description"
+              formControlName="description"
+            ></textarea>
+          </div>
+
+          <div class="col-sm-4 mt-3">
+            <label><strong>Maksimālais dalībnieku skaits</strong></label>
+            <input class="form-control" type="number" id="max" formControlName="maxParticipants" />
+          </div>
+
+          <div class="col-sm-12 text-center">
+            <button
+              class="btn btn-primary mt-3"
+              type="button"
+              (click)="createEvent()"
+              [disabled]="!eventForm.valid"
+            >
+              Izveidot pasākumu
+            </button>
+          </div>
+        </div>
+
+        <!-- Pasākumu saraksts -->
+        <div class="row mt-4">
+          <h3 class="text-center">Pieejamie pasākumi</h3>
+
+          <div class="card mt-3" *ngFor="let event of events()">
+            <div class="card-body">
+              <h5>{{ event.title }}</h5>
+              <p>{{ event.description }}</p>
+              <p><b>Datums:</b> {{ event.date | date }}</p>
+              <p><b>Dalībnieki:</b> {{ event.participants }}/{{ event.maxParticipants }}</p>
+
+              <span class="badge bg-danger" *ngIf="event.cancelled">Atcelts</span>
+              <span class="badge bg-secondary" *ngIf="event.full">Pilns</span>
+
+              <!-- Pieteikšanās / Atcelšana -->
+              <button
+                class="btn btn-primary"
+                *ngIf="!event.registered && !event.full && !event.cancelled"
+                (click)="joinEvent(event)"
+              >
+                Pieteikties
+              </button>
+
+              <button
+                class="btn btn-warning"
+                *ngIf="event.registered && !event.cancelled"
+                (click)="leaveEvent(event)"
+              >
+                Atcelt pieteikumu
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

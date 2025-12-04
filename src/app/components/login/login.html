@@ -1,0 +1,60 @@
+<div class="container-fluid bg">
+  <form [formGroup]="loginForm">
+    <div class="row justify-content-center mt-4">
+      <div class="col text-center">
+        <h2 class="fw-bold text-white">Please log in</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+      <div class="col-md-4">
+        <input
+          formControlName="name"
+          type="text"
+          placeholder="Username"
+          class="form-control mb-3"
+        />
+
+        <div
+          class="text-danger"
+          *ngIf="loginForm.get('name')?.touched && loginForm.get('name')?.invalid"
+        >
+          Username is required
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="Password"
+          class="form-control mb-3"
+        />
+
+        <div
+          class="text-danger"
+          *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
+        >
+          Password is required
+        </div>
+      </div>
+    </div>
+
+    <div class="row justify-content-center mt-3">
+      <div class="col-md-4 text-center">
+        <button
+          class="btn btn-primary"
+          type="button"
+          (click)="onClick()"
+          [disabled]="loginForm.invalid"
+        >
+          Log in
+        </button>
+
+        <div *ngIf="loginForm.invalid && loginForm.touched" class="mt-2">
+          <small class="text-danger"> Please fix the errors above before submitting! </small>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

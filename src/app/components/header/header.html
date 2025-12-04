@@ -1,0 +1,21 @@
+<div class="container-fluid">
+  <nav class="navbar navbar-expand-lg navbar-light" style="background: #eee">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+      <!-- Lietotāja sveiciens -->
+      <span class="navbar-text fs-4"> Sveiks, {{ username() }}! </span>
+
+      <!-- Pogas -->
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-danger" type="button" (click)="newAccount()">
+          Reģistrēt lietotāju
+        </button>
+
+        <button class="btn btn-outline-primary" type="button" (click)="header()">Mājas</button>
+
+        <button class="btn btn-outline-success" type="button" (click)="events()">Pasākumi</button>
+
+        <button class="btn btn-success" type="button" (click)="logout()">Iziet</button>
+      </div>
+    </div>
+  </nav>
+</div>
