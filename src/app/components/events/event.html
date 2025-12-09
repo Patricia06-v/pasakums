@@ -71,8 +71,7 @@
     </form>
 
     <h3 class="text-center mt-5 mb-3">Pieejamie pasākumi</h3>
-
-    <div class="alert alert-info text-dark" *ngIf="events().length === 0">
+    <div class="alert alert-info text-dark" *ngIf="!events().length">
       Pagaidām nav izveidoti nekādi pasākumi. Izveidojiet pirmo!
     </div>
 
