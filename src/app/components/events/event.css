@@ -1,10 +1,19 @@
 label {
     width: 100%;
     text-align: center;
+   color: #000;
 }
+
+.bg {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #5f78e8 0%, #764ba2 100%);
+}
+
 input[type="text"] {
     width: 100%;
     text-align: center;
+    color: #000;
+    
 }
 
 input[type="number"].form-control {
@@ -12,6 +21,7 @@ input[type="number"].form-control {
     text-align: center;
     appearance: textfield;
     -moz-appearance: textfield; 
+    color: #000;
 } 
 
 
@@ -19,8 +29,9 @@ input[type="number"].form-control::-webkit-outer-spin-button,
 input[type="number"].form-control::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+    color: #000;
 } 
 strong {
     font-size: 1.5em;
-    color: red;
+    color: rgb(1, 0, 0);
 }

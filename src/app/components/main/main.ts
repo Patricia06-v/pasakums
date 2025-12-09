@@ -6,7 +6,7 @@ import { EventService } from '../../services/event.service';
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule, ],
+  imports: [CommonModule],
   providers: [EventService],
   templateUrl: './main.html',
   styleUrl: './main.css'

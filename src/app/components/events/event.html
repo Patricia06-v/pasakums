@@ -1,107 +1,127 @@
-<div class="container-fluid bg text-white">
-  <form>
-    <div class="row">
-      <!-- KREISĀ SĀNA INFO – noteikumi / statistika -->
-      <div class="col-sm-4 text-start">
-        <div [innerHTML]="rules" [hidden]="rulesBoolean()"></div>
+<div class="container-fluid text-white bg">
+  <nav class="navbar navbar-expand-lg navbar-dark mb-4">
+    <div class="container-fluid">
+      <span class="navbar-brand">Sveiks/a, {{ globalUser.userGlobalSignal().name }}!</span>
+      <button class="btn btn-outline-light btn-sm" (click)="logout()">Iziet</button>
+    </div>
+  </nav>
 
-        <div [hidden]="!rulesBoolean()">
-          <h2>Pasākumu statistika</h2>
-          <p>Kopā izveidoti pasākumi: {{ globalUser.userGlobalSignal().createdEvents }}</p>
-          <p>Pieteiktie pasākumi: {{ globalUser.userGlobalSignal().joinedEvents }}</p>
-        </div>
+  <div class="container p-4">
+    <h3 class="mb-3">Izveidot jaunu pasākumu</h3>
+    <form [formGroup]="eventForm" class="row">
+      <div class="col-sm-6">
+        <input
+          class="form-control mb-1"
+          type="text"
+          formControlName="title"
+          placeholder="Nosaukums"
+        />
+        <small
+          class="text-danger d-block mb-3"
+          *ngIf="eventForm.get('title')?.touched && eventForm.get('title')?.invalid"
+          >Vismaz 3 rakstzīmes</small
+        >
       </div>
 
-      <!-- LABĀ PUSE – Pasākuma izveide + saraksts -->
-      <div class="col-sm-8">
-        <!-- Pasākuma izveide -->
-        <div class="row">
-          <h3 class="mb-3">Izveidot jaunu pasākumu</h3>
+      <div class="col-sm-6">
+        <input class="form-control mb-1" type="date" formControlName="date" />
+        <small
+          class="text-danger d-block mb-3"
+          *ngIf="eventForm.get('date')?.touched && eventForm.get('date')?.invalid"
+          >Datums obligāts</small
+        >
+      </div>
 
-          <div class="col-sm-6">
-            <label><strong>Nosaukums</strong></label>
-            <input
-              class="form-control"
-              type="text"
-              id="title"
-              formControlName="title"
-              (focus)="clearInput(inputTitle)"
-              #inputTitle
-            />
-          </div>
+      <div class="col-12">
+        <textarea
+          class="form-control mb-1"
+          formControlName="description"
+          placeholder="Apraksts"
+          rows="3"
+        ></textarea>
+        <small
+          class="text-danger d-block mb-3"
+          *ngIf="eventForm.get('description')?.touched && eventForm.get('description')?.invalid"
+          >Vismaz 10 rakstzīmes</small
+        >
+      </div>
 
-          <div class="col-sm-6">
-            <label><strong>Datums</strong></label>
-            <input
-              class="form-control"
-              type="date"
-              id="date"
-              formControlName="date"
-              (focus)="clearInput(inputDate)"
-              #inputDate
-            />
-          </div>
+      <div class="col-sm-6">
+        <input
+          class="form-control mb-1"
+          type="number"
+          formControlName="maxParticipants"
+          placeholder="Dalībnieki"
+          min="1"
+        />
+        <small
+          class="text-danger d-block mb-3"
+          *ngIf="
+            eventForm.get('maxParticipants')?.touched && eventForm.get('maxParticipants')?.invalid
+          "
+          >Vismaz 1</small
+        >
+      </div>
 
-          <div class="col-sm-12 mt-3">
-            <label><strong>Apraksts</strong></label>
-            <textarea
-              class="form-control"
-              id="description"
-              formControlName="description"
-            ></textarea>
-          </div>
+      <div class="col-12 text-center">
+        <button class="btn btn-success" type="button" (click)="createEvent()">
+          Izveidot pasākumu
+        </button>
+      </div>
+    </form>
 
-          <div class="col-sm-4 mt-3">
-            <label><strong>Maksimālais dalībnieku skaits</strong></label>
-            <input class="form-control" type="number" id="max" formControlName="maxParticipants" />
-          </div>
+    <h3 class="text-center mt-5 mb-3">Pieejamie pasākumi</h3>
 
-          <div class="col-sm-12 text-center">
-            <button
-              class="btn btn-primary mt-3"
-              type="button"
-              (click)="createEvent()"
-              [disabled]="!eventForm.valid"
+    <div class="alert alert-info text-dark" *ngIf="events().length === 0">
+      Pagaidām nav izveidoti nekādi pasākumi. Izveidojiet pirmo!
+    </div>
+
+    <div class="card text-dark mb-3" *ngFor="let event of events()">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <div>
+            <h5>{{ event.title }}</h5>
+            <p>{{ event.description }}</p>
+            <small><strong>Datums:</strong> {{ event.date | date : 'dd.MM.yyyy' }}</small
+            ><br />
+            <small
+              ><strong>Dalībnieki:</strong> {{ event.participants || 0 }}/{{
+                event.maxParticipants
+              }}</small
             >
-              Izveidot pasākumu
-            </button>
+          </div>
+          <div>
+            <span class="badge bg-danger" *ngIf="event.cancelled">Atcelts</span>
+            <span class="badge bg-warning text-dark" *ngIf="event.full && !event.cancelled"
+              >Pilns</span
+            >
+            <span class="badge bg-success" *ngIf="event.registered && !event.cancelled"
+              >Pieteicies</span
+            >
           </div>
         </div>
 
-        <!-- Pasākumu saraksts -->
-        <div class="row mt-4">
-          <h3 class="text-center">Pieejamie pasākumi</h3>
-
-          <div class="card mt-3" *ngFor="let event of events()">
-            <div class="card-body">
-              <h5>{{ event.title }}</h5>
-              <p>{{ event.description }}</p>
-              <p><b>Datums:</b> {{ event.date | date }}</p>
-              <p><b>Dalībnieki:</b> {{ event.participants }}/{{ event.maxParticipants }}</p>
-
-              <span class="badge bg-danger" *ngIf="event.cancelled">Atcelts</span>
-              <span class="badge bg-secondary" *ngIf="event.full">Pilns</span>
-
-              <!-- Pieteikšanās / Atcelšana -->
-              <button
-                class="btn btn-primary"
-                *ngIf="!event.registered && !event.full && !event.cancelled"
-                (click)="joinEvent(event)"
-              >
-                Pieteikties
-              </button>
-
-              <button
-                class="btn btn-warning"
-                *ngIf="event.registered && !event.cancelled"
-                (click)="leaveEvent(event)"
-              >
-                Atcelt pieteikumu
-              </button>
-            </div>
-          </div>
+        <div class="mt-3">
+          <button
+            class="btn btn-primary btn-sm"
+            *ngIf="!event.registered && !event.full && !event.cancelled"
+            (click)="joinEvent(event)"
+          >
+            Pieteikties
+          </button>
+          <button
+            class="btn btn-warning btn-sm"
+            *ngIf="event.registered && !event.cancelled"
+            (click)="leaveEvent(event)"
+          >
+            Atcelt
+          </button>
+          <span class="text-muted" *ngIf="event.full && !event.registered && !event.cancelled"
+            >Pasākums pilns</span
+          >
+          <span class="text-danger" *ngIf="event.cancelled">Pasākums atcelts</span>
         </div>
       </div>
     </div>
-  </form>
+  </div>
 </div>

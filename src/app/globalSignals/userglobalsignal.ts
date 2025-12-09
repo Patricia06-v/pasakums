@@ -7,13 +7,25 @@ import { UserModel } from '../models/userModel';
 export class UserGlobalSignal {
 
   // Glabā tikai to, kas pasākumu sistēmai nepieciešams
-  userGlobalSignal = signal<UserModel>({
-    id: 0,
-    name: '',
-    password: '',
-    joinedEvents: undefined,
-    createdEvents: undefined
-  });
+  userGlobalSignal = signal<UserModel>(this.loadUserFromStorage());
+  
+  private loadUserFromStorage(): UserModel {
+    const stored = localStorage.getItem('userModel');
+    if (stored) {
+      try {
+        return JSON.parse(stored);
+      } catch (e) {
+        console.error('Failed to parse stored user', e);
+      }
+    }
+    return {
+      id: 0,
+      name: '',
+      password: '',
+      joinedEvents: undefined,
+      createdEvents: undefined
+    };
+  }
 }
 
 export interface User {
@@ -45,8 +57,23 @@ export function clearUser() {
 }
 
 export function setUser(user: any) {
-  // Implementation to set user signal
+  console.log('setUser called with:', user);
+  // Update both signals
   userSignal.set(user);
+  
+  // Also update the UserGlobalSignal instance
+  // This is a workaround - we'll use the service directly in components
+  const userModel: UserModel = {
+    id: user.id || 0,
+    name: user.username || user.name || '',
+    password: '',
+    joinedEvents: user.joinedEvents || 0,
+    createdEvents: user.createdEvents || 0
+  };
+  console.log('UserModel created:', userModel);
+  
+  // Store in localStorage so it persists
+  localStorage.setItem('userModel', JSON.stringify(userModel));
 }
 
 

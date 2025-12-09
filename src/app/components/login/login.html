@@ -1,60 +1,111 @@
 <div class="container-fluid bg">
-  <form [formGroup]="loginForm">
-    <div class="row justify-content-center mt-4">
-      <div class="col text-center">
-        <h2 class="fw-bold text-white">Please log in</h2>
-      </div>
-    </div>
+  <div class="row justify-content-center mt-4">
+    <div class="col-md-4 text-center">
+      <h2 class="fw-bold text-white mb-4">
+        {{ isRegisterMode ? 'Reģistrācija' : 'Pieslēgšanās' }}
+      </h2>
 
-    <div class="row justify-content-center mt-4">
-      <div class="col-md-4">
+      <!-- LOGIN FORM -->
+      <form [formGroup]="loginForm" *ngIf="!isRegisterMode">
         <input
           formControlName="name"
           type="text"
-          placeholder="Username"
-          class="form-control mb-3"
+          placeholder="Lietotājvārds"
+          class="form-control mb-2"
         />
-
-        <div
-          class="text-danger"
+        <small
+          class="text-danger d-block mb-3"
           *ngIf="loginForm.get('name')?.touched && loginForm.get('name')?.invalid"
         >
-          Username is required
-        </div>
-      </div>
+          Vismaz 3 rakstzīmes
+        </small>
 
-      <div class="col-md-4">
         <input
           formControlName="password"
           type="password"
-          placeholder="Password"
-          class="form-control mb-3"
+          placeholder="Parole"
+          class="form-control mb-2"
         />
-
-        <div
-          class="text-danger"
+        <small
+          class="text-danger d-block mb-3"
           *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid"
         >
-          Password is required
-        </div>
-      </div>
-    </div>
+          Vismaz 4 rakstzīmes
+        </small>
 
-    <div class="row justify-content-center mt-3">
-      <div class="col-md-4 text-center">
         <button
-          class="btn btn-primary"
+          class="btn btn-primary w-100 mt-2"
           type="button"
           (click)="onClick()"
           [disabled]="loginForm.invalid"
         >
-          Log in
+          Pieslēgties
         </button>
 
-        <div *ngIf="loginForm.invalid && loginForm.touched" class="mt-2">
-          <small class="text-danger"> Please fix the errors above before submitting! </small>
-        </div>
-      </div>
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+
+        <button class="btn btn-link text-white mt-3" type="button" (click)="toggleMode()">
+          Nav konta? Reģistrēties
+        </button>
+      </form>
+
+      <!-- REGISTRATION FORM -->
+      <form [formGroup]="registerForm" *ngIf="isRegisterMode">
+        <input
+          formControlName="name"
+          type="text"
+          placeholder="Lietotājvārds"
+          class="form-control mb-2"
+        />
+        <small
+          class="text-danger d-block mb-3"
+          *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.invalid"
+        >
+          Vismaz 3 rakstzīmes
+        </small>
+
+        <input
+          formControlName="email"
+          type="email"
+          placeholder="E-pasts"
+          class="form-control mb-2"
+        />
+        <small
+          class="text-danger d-block mb-3"
+          *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
+        >
+          Derīga e-pasta adrese
+        </small>
+
+        <input
+          formControlName="password"
+          type="password"
+          placeholder="Parole"
+          class="form-control mb-2"
+        />
+        <small
+          class="text-danger d-block mb-3"
+          *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid"
+        >
+          Vismaz 4 rakstzīmes
+        </small>
+
+        <button
+          class="btn btn-success w-100 mt-2"
+          type="button"
+          (click)="onRegister()"
+          [disabled]="registerForm.invalid"
+        >
+          Reģistrēties
+        </button>
+
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+        <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+
+        <button class="btn btn-link text-white mt-3" type="button" (click)="toggleMode()">
+          Jau ir konts? Pieslēgties
+        </button>
+      </form>
     </div>
-  </form>
+  </div>
 </div>
