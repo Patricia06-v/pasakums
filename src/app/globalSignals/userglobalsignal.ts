@@ -58,11 +58,9 @@ export function clearUser() {
 
 export function setUser(user: any) {
   console.log('setUser called with:', user);
-  // Update both signals
   userSignal.set(user);
   
-  // Also update the UserGlobalSignal instance
-  // This is a workaround - we'll use the service directly in components
+
   const userModel: UserModel = {
     id: user.id || 0,
     name: user.username || user.name || '',
@@ -72,7 +70,6 @@ export function setUser(user: any) {
   };
   console.log('UserModel created:', userModel);
   
-  // Store in localStorage so it persists
   localStorage.setItem('userModel', JSON.stringify(userModel));
 }
 

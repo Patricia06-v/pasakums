@@ -5,7 +5,6 @@
         {{ isRegisterMode ? 'Reģistrācija' : 'Pieslēgšanās' }}
       </h2>
 
-      <!-- LOGIN FORM -->
       <form [formGroup]="loginForm" *ngIf="!isRegisterMode">
         <input
           formControlName="name"
@@ -49,7 +48,6 @@
         </button>
       </form>
 
-      <!-- REGISTRATION FORM -->
       <form [formGroup]="registerForm" *ngIf="isRegisterMode">
         <input
           formControlName="name"

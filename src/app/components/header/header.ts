@@ -14,7 +14,7 @@ export class Header {
 
   router = inject(Router);
   
-  // Use the global signals
+  // global signals
   isLoggedIn = isLoggedIn;
   username = username;
 
@@ -50,7 +50,7 @@ export class Header {
     if (confirm('Vai tiešām vēlaties dzēst savu kontu?')) {
       const user = userSignal();
       if (user?.id) {
-        // Add your delete account service call here
+        
         console.log('Deleting account:', user.id);
         clearUser();
         this.router.navigate(['/register']);

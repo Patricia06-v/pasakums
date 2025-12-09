@@ -44,7 +44,7 @@ export class Main implements OnInit {
     this.eventService.join(eventId).subscribe({
       next: (event: any) => {
         console.log('Successfully joined event:', event);
-        this.loadEvents(); // Refresh the list
+        this.loadEvents();
       },
       error: (err: any) => {
         console.error('Error joining event:', err);
